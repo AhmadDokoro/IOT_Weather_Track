@@ -1,0 +1,155 @@
+body {
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(120deg, #e8eef3, #f5f7fa);
+  margin: 0;
+  color: #333;
+}
+
+header {
+  text-align: center;
+  padding: 2rem;
+}
+
+#dashboard {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
+  gap: 1.5rem;
+  padding: 2rem;
+}
+
+.card {
+  background: rgba(255,255,255,0.7);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: transform .3s, box-shadow .3s;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+
+.card:focus {
+  outline: 3px solid rgba(74,144,226,0.25);
+  transform: translateY(-6px);
+  box-shadow: 0 24px 48px rgba(0,0,0,0.12);
+}
+
+.icon {
+  font-size: 2rem;
+}
+
+.value {
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+.hint {
+  font-size: .8rem;
+  opacity: .6;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 800px;
+}
+
+.hidden {
+  display: none;
+}
+
+/* here */
+button.close-btn {
+  background: #ff5c5c;
+  border: none;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  float: right;
+}
+
+button.close-btn:hover {
+  background: #ff3b3b;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+th, td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background: #f4f4f4;
+}
+
+tr:hover {
+  background: #f1f1f1;
+}
+
+/* Additional styles for better aesthetics */
+.card .icon {
+  color: #4a90e2;
+}   
+.card .value {
+  color: #2c3e50;
+}   
+.card .hint {
+  color: #7f8c8d;
+}   
+
+.modal-content h2 {
+  margin-top: 0;
+  color: #2c3e50;
+}
+
+.modal-content p {
+  color: #555;
+}   
+
+.modal-content table th {
+  background: #3498db;
+  color: white;
+
+}
+
+.modal-content table td {
+  color: #34495e;
+}
+/* Skeleton state for loading cards */
+.card.skeleton {
+  position: relative;
+  color: transparent;
+}
+.card.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.6), rgba(255,255,255,0));
+  animation: shimmer 1.2s infinite;
+  border-radius: 16px;
+}
+@keyframes shimmer { from { transform: translateX(-100%);} to { transform: translateX(100%);} }
+/* here */  
+
+
