@@ -136,6 +136,28 @@ tr:hover {
 .modal-content table td {
   color: #34495e;
 }
+/* Status bulb for Distance sensor */
+.status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+.status-bulb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(0,0,0,0.08);
+  display: inline-block;
+}
+.status-label {
+  font-size: 0.85rem;
+  color: #4b5563;
+}
+.status-red { background: #e74c3c; box-shadow: 0 0 12px rgba(231,76,60,0.25);}    
+.status-amber { background: #ffb74d; box-shadow: 0 0 12px rgba(255,183,77,0.18);}   
+.status-green { background: #2ecc71; box-shadow: 0 0 12px rgba(46,204,113,0.18);} 
+.status-unknown { background: #bdc3c7;}
 /* Skeleton state for loading cards */
 .card.skeleton {
   position: relative;
