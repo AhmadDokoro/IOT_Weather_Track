@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WeatherTrack Dashboard</title>
+
+<!-- FONT + ICONS -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script src="https://unpkg.com/feather-icons"></script>
+
+<style>
+:root{
+ --bg:#eef1f5;
+ --panel:#ffffff;
+ --primary:#4460f1;
+ --primary-light:#dfe3ff;
+ --text:#222;
+ --soft:#f5f7fa;
+ --radius:18px;
+}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+
+body{
+ background:var(--bg);
+ color:var(--text);
+ padding:30px;
+}
+
+header{
+ text-align:center;
+ padding:20px 0;
+}
+
+h1{
+ font-size:3rem;
+ font-weight:800;
+ background: linear-gradient(90deg,#4154ff,#7b2ff7);
+ -webkit-background-clip:text;
+ -webkit-text-fill-color:transparent;
+}
+
+.tagline{
+ opacity:.8;
+ font-size:1.1rem;
+ margin-top:8px;
+}
+
+.last-update{
+ margin-top:12px;
+ font-size:.9rem;
+ opacity:.6;
+}
+
+.dashboard{
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+ gap:22px;
+ margin-top:40px;
+}
+
+.card{
+ background:var(--panel);
+ padding:22px;
+ border-radius:var(--radius);
+ box-shadow:0 12px 25px rgba(0,0,0,0.08);
+ cursor:pointer;
+ transition:0.25s;
+ position:relative;
+ overflow:hidden;
+}
+
+.card:hover{
+ transform:translateY(-8px);
+ box-shadow:0 16px 32px rgba(0,0,0,0.12);
+}
+
+.card h3{
+ font-size:1.1rem;
+ font-weight:600;
+ display:flex;
+ gap:10px;
+ align-items:center;
+}
+
+.value{
+ font-size:2.4rem;
+ font-weight:800;
+ margin:10px 0;
+ color:var(--primary);
+}
+
+.icon-badge{
+ background:var(--primary-light);
+ padding:8px;
+ border-radius:10px;
+ display:inline-flex;
+}
+
+.status-icon{
+ position:absolute;
+ top:16px;
+ right:16px;
+ opacity:.2;
+}
+
+.status-icon svg{
+ width:50px;
+ height:50px;
+}
+
+footer{
+ text-align:center;
+ margin-top:50px;
+ font-size:.9rem;
+ opacity:.6;
+}
+
+/* MODAL */
+.modal-bg{
+ position:fixed;
+ top:0;left:0;
+ width:100%;
+ height:100%;
+ background:rgba(0,0,0,0.55);
+ backdrop-filter:blur(5px);
+ display:none;
+ justify-content:center;
+ align-items:center;
+ padding:20px;
+ z-index:1000;
+}
+.modal{
+ background:#fff;
+ width:90%;
+ max-width:900px;
+ padding:30px;
+ border-radius:var(--radius);
+ position:relative;
+ animation:pop .35s ease;
+}
+@keyframes pop{
+ 0%{transform:scale(0.8) translateY(20px);opacity:0}
+ 100%{transform:scale(1) translateY(0);opacity:1}
+}
+.close{
+ position:absolute;
+ top:10px;right:10px;
+ background:var(--primary-light);
+ padding:8px 12px;
+ border-radius:10px;
+ cursor:pointer;
+}
+#chartContainer{margin-top:20px;}
+</style>
+</head>
+<body>
+
+<header>
+ <h1>🌦 WeatherTrack</h1>
+ <p class="tagline">Real-Time Weather & Environmental Monitoring</p>
+ <p class="last-update" id="lastUpdate">Updating...</p>
+</header>
+
+
+<div class="dashboard">
+
+ <div class="card" onclick="showChart('Temperature (°C)',1,'🌡')">
+  <div class="status-icon"><i data-feather="thermometer"></i></div>
+  <h3><span class="icon-badge">🌡</span> Temperature</h3>
+  <div class="value" id="temperature">-- °C</div>
+  <p>Tap to view chart history →</p>
+ </div>
+
+ <div class="card" onclick="showChart('Humidity (%)',2,'💧')">
+  <div class="status-icon"><i data-feather="droplets"></i></div>
+  <h3><span class="icon-badge">💧</span> Humidity</h3>
+  <div class="value" id="humidity">-- %</div>
+  <p>Tap to view chart history →</p>
+ </div>
+
+ <div class="card" onclick="showChart('Light (LUX)',3,'☀️')">
+  <div class="status-icon"><i data-feather="sun"></i></div>
+  <h3><span class="icon-badge">☀️</span> Light Intensity</h3>
+  <div class="value" id="light">-- LUX</div>
+  <p>Tap to view chart history →</p>
+ </div>
+
+ <div class="card" onclick="showChart('Motion Status',4,'👤')">
+  <div class="status-icon"><i data-feather="activity"></i></div>
+  <h3><span class="icon-badge">👤</span> Human Presence</h3>
+  <div class="value" id="motion">--</div>
+  <p>Tap to view chart history →</p>
+ </div>
+
+ <div class="card" onclick="showChart('Rainfall (mm)',5,'🌧')">
+  <div class="status-icon"><i data-feather="cloud-drizzle"></i></div>
+  <h3><span class="icon-badge">🌧</span> Rain Gauge</h3>
+  <div class="value" id="rain">-- mm</div>
+  <p>Tap to view chart history →</p>
+ </div>
+
+ <div class="card" onclick="showChart('Water/Distance (cm)',6,'🌊')">
+  <div class="status-icon"><i data-feather="wave"></i></div>
+  <h3><span class="icon-badge">🌊</span> Water Level</h3>
+  <div class="value" id="ultrasonic">-- cm</div>
+  <p>Tap to view chart history →</p>
+ </div>
+
+</div>
+
+
+<footer>
+ 📡 Data refreshes every 5 seconds • Powered by ThingSpeak API
+</footer>
+
+<!-- MODAL -->
+<div class="modal-bg" id="modalBg">
+ <div class="modal">
+  <div class="close" onclick="closeModal()">✖ Close</div>
+  <h2 id="chartTitle"></h2>
+  <div id="chartContainer"></div>
+ </div>
+</div>
+
+<script>
+feather.replace();
+
+// 🚨 REPLACE THESE WITH YOUR REAL INFO
+const CHANNEL_ID = "YOUR_CHANNEL_ID_HERE";
+const READ_API_KEY = "YOUR_API_KEY_HERE";
+// ⬆️ REQUIRED TO WORK
+
+async function fetchData(){
+ const url = `https://api.thingspeak.com/channels/${CHANNEL_ID}/feeds.json?api_key=${READ_API_KEY}&results=1`;
+ const res = await fetch(url); const d = await res.json(); const f = d.feeds[0];
+
+ document.getElementById("temperature").innerText = f.field1 + " °C";
+ document.getElementById("humidity").innerText = f.field2 + " %";
+ document.getElementById("light").innerText = f.field3 + " LUX";
+ document.getElementById("motion").innerText = f.field4 == "1" ? "Detected 👤" : "No Motion";
+ document.getElementById("rain").innerText = f.field5 + " mm";
+ document.getElementById("ultrasonic").innerText = f.field6 + " cm";
+ document.getElementById("lastUpdate").innerText = "Last update: " + f.created_at;
+}
+setInterval(fetchData,5000); fetchData();
+
+
+async function showChart(label,field,icon){
+ document.getElementById("modalBg").style.display="flex";
+ document.getElementById("chartTitle").innerHTML = `${icon} ${label} History`;
+
+ const url = `https://api.thingspeak.com/channels/${CHANNEL_ID}/fields/${field}.json?api_key=${READ_API_KEY}&results=50`;
+ const res = await fetch(url); const data = await res.json();
+
+ const values = data.feeds.map(e=>parseFloat(e[`field${field}`]));
+ const time = data.feeds.map(e=>e.created_at);
+
+ let options = {
+  chart:{type:"area",height:380,toolbar:{show:false}},
+  series:[{name:label, data:values}],
+  xaxis:{categories:time,labels:{show:false}},
+  colors:["#4154ff"],
+  stroke:{curve:"smooth",width:4},
+  fill:{type:"gradient",gradient:{shadeIntensity:1,opacityFrom:0.5,opacityTo:0.1}},
+ };
+ if(window.chart){chart.destroy();}
+ window.chart = new ApexCharts(document.querySelector("#chartContainer"), options);
+ chart.render();
+}
+
+function closeModal(){
+ document.getElementById("modalBg").style.display="none";
+ document.getElementById("chartContainer").innerHTML="";
+}
+</script>
+
+</body>
+</html>
